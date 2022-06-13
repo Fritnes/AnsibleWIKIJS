@@ -1,0 +1,34 @@
+version: "{{version}}"
+services:
+
+  db:
+    image: postgres:11-alpine
+    container_name: wiki_db
+    environment:
+      POSTGRES_DB: {{ wikijs_postgres_db }}
+      POSTGRES_PASSWORD: {{ wikijs_postgres_password }}
+      POSTGRES_USER: {{ wikijs_postgres_user }}
+    logging:
+      driver: "none"
+    restart: unless-stopped
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+
+  wiki:
+    image: requarks/wiki:2
+    container_name: wiki_app
+    depends_on:
+      - db
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: {{ wikijs_postgres_user }}
+      DB_PASS: {{ wikijs_postgres_password }}
+      DB_NAME: {{ wikijs_postgres_db }}
+    restart: unless-stopped
+    ports:
+      - "{{ wikijs_listern_port }}:3000"
+
+volumes:
+  db-data:

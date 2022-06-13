@@ -1,0 +1,21 @@
+---
+# tasks file for wiki.js
+  - name: Create directorys
+    file:
+      path: "{{item }}"
+      state: directory
+    loop:
+      - "{{docker_folder}}/{{wikijs_container_name}}"
+      - "{{docker_folder}}/{{wikijs_container_name}}/db-data"
+
+  - name: Generate docker_compose
+    template:
+      src: "docker_compose.j2"
+      dest: "{{docker_folder}}/{{wikijs_container_name}}/docker-compose.yml"
+    notify: Restart {{wikijs_container_name}} container
+
+  - name: Generate init
+    template:
+      src: "docker_compose_service.j2"
+      dest: "/etc/systemd/system/{{wikijs_container_name}}.service"
+    notify: Restart {{wikijs_container_name}} container

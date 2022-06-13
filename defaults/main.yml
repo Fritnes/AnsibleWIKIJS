@@ -1,0 +1,9 @@
+---
+# defaults file for wiki.js
+docker_folder: "/opt"
+version: "3"
+wikijs_container_name: "wikijs"
+wikijs_postgres_db: "wiki"
+wikijs_postgres_password: "wikijsrocks"
+wikijs_postgres_user: "wikijs"
+wikijs_listern_port: "8080"
